@@ -1,11 +1,12 @@
-import React from 'react';
+import React from "react";
+import BookableList from "./BookableList";
 
 function BookablesPage(props) {
-    return (
-        <div className='bookables-page'>
-            <p>Bookables!</p>
-        </div>
-    );
+  return (
+    <main className="bookables-page">
+      <BookableList />
+    </main>
+  );
 }
 
 export default BookablesPage;
