@@ -23,7 +23,10 @@ function BookableList(props) {
   };
 
   const changeGroup = (e) => {
-    setGroup(e.target.value);
+    // when changing multiple value of managed state it is
+    // better to use useReducer hook from react hooks concept
+    // it solves the issue of managing multiple value of state
+    setGroup(e.target.value); 
     setBookableIndex(0);
   };
 
