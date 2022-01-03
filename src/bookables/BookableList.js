@@ -1,33 +1,52 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useReducer } from "react";
 import data from "../static.json";
 import { FaArrowRight } from "react-icons/fa";
+import reducer from "./reducer";
 
 const { bookables, days, sessions } = data;
 
-function BookableList(props) {
-  const [group, setGroup] = useState("Kit");
-  const bookablesInGroup = bookables.filter((b) => b.group === group);
-  const [bookableIndex, setBookableIndex] = useState(0);
+const initialState = {
+  group: "Kit",
+  bookableIndex: 0,
+  hasDetails: true,
+  bookables,
+};
 
-  // get the set of groups
+function BookableList(props) {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { group, bookableIndex, bookables, hasDetails } = state;
+
+  const bookablesInGroup = bookables.filter((b) => b.group === group);
   const groups = [...new Set(bookables.map((b) => b.group))];
   const bookable = bookablesInGroup[bookableIndex];
-  const [hasDetails, setHasDetails] = useState(false);
 
   const changeBookableIndex = (selectedIndex) => {
-    setBookableIndex(selectedIndex);
+    dispatch({
+      type: "SET_BOOKABLES",
+      payload: selectedIndex,
+    });
   };
 
   const nextBookable = () => {
-    setBookableIndex((i) => (i + 1) % bookablesInGroup.length);
+    dispatch({
+      type: "NEXT_BOOKABLES",
+    });
   };
 
   const changeGroup = (e) => {
     // when changing multiple value of managed state it is
     // better to use useReducer hook from react hooks concept
     // it solves the issue of managing multiple value of state
-    setGroup(e.target.value); 
-    setBookableIndex(0);
+    dispatch({
+      type: "SET_GROUP",
+      payload: e.target.value,
+    });
+  };
+
+  const toggleHasDetails = () => {
+    dispatch({
+      type: "TOGGLE_HAS_DETAILS",
+    });
   };
 
   return (
@@ -67,7 +86,7 @@ function BookableList(props) {
                 <input
                   type="checkbox"
                   checked={hasDetails}
-                  onChange={() => setHasDetails((has) => !has)}
+                  onChange={toggleHasDetails}
                 />
                 Show Details
               </span>
