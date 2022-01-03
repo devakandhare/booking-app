@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 // import different app components for application routing
 import BookablesPage from "./bookables/BookablesPage";
-import BookingsPage from "./bookables/BookingsPage";
+import BookingsPage from "./bookings/BookingsPage";
 import UsersPage from "./users/UsersPage";
 import UsersPicker from "./users/UsersPicker";
 
