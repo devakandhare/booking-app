@@ -1,25 +1,39 @@
-import React, { Fragment, useState } from "react";
-import data from "../static.json";
+import React, { Fragment, useEffect, useState } from "react";
+// import data from "../static.json";
 
-const { users } = data;
+// const { users } = data;
 
 function UsersList(props) {
-  const [userIndex, setUserIndex] = useState(0);
-  const user = users[userIndex];
+  const [users, setUsers] = useState(null);
+  const [userIndex, setUserIndex] = useState(null);
+
+  useEffect(() => {
+    // fetching users data from api
+    fetch("http://localhost:3001/users")
+      .then((resp) => resp.json())
+      .then((data) => {
+        setUsers(data);
+        setUserIndex(0);
+      });
+  }, []);
+
+  const user = users && users.length > 0 && users[userIndex];
 
   const changeUserIndex = (selectedIndex) => {
     setUserIndex(selectedIndex);
   };
+
   return (
     <Fragment>
       <ul className="user-details items-list-nav">
-        {users.map((u, i) => (
-          <li key={u.id} className={i === userIndex ? "selected" : null}>
-            <button className="btn" onClick={() => changeUserIndex(i)}>
-              {u.name}
-            </button>
-          </li>
-        ))}
+        {users &&
+          users.map((u, i) => (
+            <li key={u.id} className={i === userIndex ? "selected" : null}>
+              <button className="btn" onClick={() => changeUserIndex(i)}>
+                {u.name}
+              </button>
+            </li>
+          ))}
       </ul>
       {/** show the details of user. */}
       {user && (
