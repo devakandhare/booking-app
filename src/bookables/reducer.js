@@ -24,7 +24,26 @@ export default function reducer(state, action) {
         ...state,
         bookableIndex: (state.bookableIndex + 1) % count,
       };
+    case "FETCH_BOOKABLES_REQUEST":
+      return {
+        ...state,
+        isLoading: false,
+        error: false,
+        bookables: [],
+      };
+    case "FETCH_BOOKABLES_SUCCESS":
+      return {
+        ...state,
+        isLoading: false,
+        bookables: action.payload,
+      };
+    case "FETCH_BOOKABLES_ERROR":
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+      };
     default:
-      break;
+      return state;
   }
 }

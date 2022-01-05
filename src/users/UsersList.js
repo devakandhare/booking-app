@@ -1,19 +1,27 @@
 import React, { Fragment, useEffect, useState } from "react";
+import getData from "../utils/api";
 // import data from "../static.json";
 
 // const { users } = data;
 
 function UsersList(props) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [users, setUsers] = useState(null);
   const [userIndex, setUserIndex] = useState(null);
 
   useEffect(() => {
     // fetching users data from api
-    fetch("http://localhost:3001/users")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setUsers(data);
+    getData("http://localhost:3001/users")
+      .then((users) => {
+        setUsers(users);
         setUserIndex(0);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+        setIsLoading(false);
       });
   }, []);
 
@@ -23,6 +31,12 @@ function UsersList(props) {
     setUserIndex(selectedIndex);
   };
 
+  if (error) {
+    return <p>{error.message}</p>;
+  }
+  if (isLoading) {
+    return <p>Users loading...</p>;
+  }
   return (
     <Fragment>
       <ul className="user-details items-list-nav">
