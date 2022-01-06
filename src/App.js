@@ -9,6 +9,7 @@ import UsersPicker from "./users/UsersPicker";
 
 // import icons to show with navigation menu
 import { FaCalendarAlt, FaDoorOpen, FaUsers } from "react-icons/fa";
+import Counter from "./bookings/Counter";
 
 function App() {
   return (
@@ -36,6 +37,12 @@ function App() {
                   <span>Users</span>
                 </Link>
               </li>
+              <li>
+                <Link to="/counter" className="btn btn-header">
+                  <FaUsers />
+                  <span>Counter</span>
+                </Link>
+              </li>
             </ul>
           </nav>
           <UsersPicker />
@@ -45,6 +52,7 @@ function App() {
           <Route path="/bookings" element={<BookingsPage />} />
           <Route path="/bookables" element={<BookablesPage />} />
           <Route path="/users" element={<UsersPage />} />
+          <Route path="/counter" element={<Counter />} />
         </Routes>
       </div>
     </Router>
