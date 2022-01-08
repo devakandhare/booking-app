@@ -25,7 +25,7 @@ function BookableList(props) {
   const groups = [...new Set(bookables.map((b) => b.group))];
   const bookable = bookablesInGroup[bookableIndex];
 
-  const timerRef = useRef(null);
+  // const timerRef = useRef(null);
 
   useEffect(() => {
     dispatch({ type: "FETCH_BOOKABLES_REQUEST" });
@@ -41,23 +41,30 @@ function BookableList(props) {
       });
   }, []);
 
-  useEffect(() => {
-    timerRef.current = setInterval(() => {
-      dispatch({ type: "NEXT_BOOKABLES" });
-    }, 3000);
+  // useEffect(() => {
+  //   timerRef.current = setInterval(() => {
+  //     dispatch({ type: "NEXT_BOOKABLES" });
+  //   }, 3000);
 
-    return stopPresentation;
-  }, []);
+  //   return stopPresentation;
+  // }, []);
 
-  function stopPresentation() {
-    clearInterval(timerRef.current);
-  }
+  // function stopPresentation() {
+  //   clearInterval(timerRef.current);
+  // }
+
+  /** TODO: Next requirement is when user select bookables focus on next button and
+   * space bar can move to next one */
+  // create useRef hook to hold reference of next button
+  const nextButtonRef = useRef();
 
   const changeBookableIndex = (selectedIndex) => {
     dispatch({
       type: "SET_BOOKABLES",
       payload: selectedIndex,
     });
+    // add focus when use choose bookables
+    nextButtonRef.current.focus();
   };
 
   const nextBookable = () => {
@@ -111,7 +118,12 @@ function BookableList(props) {
           ))}
         </ul>
         <p>
-          <button className="btn" onClick={nextBookable} autoFocus>
+          <button
+            className="btn"
+            onClick={nextBookable}
+            ref={nextButtonRef}
+            autoFocus
+          >
             <FaArrowRight />
             <span>Next</span>
           </button>
@@ -132,9 +144,7 @@ function BookableList(props) {
                   />
                   Show Details
                 </label>
-                <button className="btn" onClick={stopPresentation}>
-                  Stop
-                </button>
+                {/** <button className="btn" onClick={stopPresentation}>Stop</button> */}
               </span>
             </div>
             <p>{bookable.notes}</p>
