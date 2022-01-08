@@ -1,4 +1,4 @@
-import React, { Fragment, useReducer, useEffect } from "react";
+import React, { Fragment, useReducer, useEffect, useRef } from "react";
 import data from "../static.json";
 import { FaArrowRight } from "react-icons/fa";
 import reducer from "./reducer";
@@ -25,6 +25,8 @@ function BookableList(props) {
   const groups = [...new Set(bookables.map((b) => b.group))];
   const bookable = bookablesInGroup[bookableIndex];
 
+  const timerRef = useRef(null);
+
   useEffect(() => {
     dispatch({ type: "FETCH_BOOKABLES_REQUEST" });
     getData("http://localhost:3001/bookables")
@@ -38,6 +40,18 @@ function BookableList(props) {
         });
       });
   }, []);
+
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      dispatch({ type: "NEXT_BOOKABLES" });
+    }, 3000);
+
+    return stopPresentation;
+  }, []);
+
+  function stopPresentation() {
+    clearInterval(timerRef.current);
+  }
 
   const changeBookableIndex = (selectedIndex) => {
     dispatch({
@@ -110,12 +124,17 @@ function BookableList(props) {
             <div className="item-header">
               <h2>{bookable.title}</h2>
               <span className="controls">
-                <input
-                  type="checkbox"
-                  checked={hasDetails}
-                  onChange={toggleHasDetails}
-                />
-                Show Details
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={hasDetails}
+                    onChange={toggleHasDetails}
+                  />
+                  Show Details
+                </label>
+                <button className="btn" onClick={stopPresentation}>
+                  Stop
+                </button>
               </span>
             </div>
             <p>{bookable.notes}</p>
